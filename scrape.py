@@ -1,4 +1,5 @@
 # Web scraping project
+# *****************Extracts title, prices,image From Flipkart Website *********************************************
 from bs4 import BeautifulSoup
 import requests
 
