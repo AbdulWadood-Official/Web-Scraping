@@ -46,6 +46,6 @@ for i in range(2, 12):
         name = i.text
         Reviews.append(name)
     # print(Reviews)
-
+# DataFrame:
 df = pd.DataFrame({"Product Name":Product_name,"Prices":Prices,"Description":Description,"Reviews":Reviews})
 print(df)
