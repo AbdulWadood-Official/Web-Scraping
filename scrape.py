@@ -1,58 +1,51 @@
 # Web scraping project
 # *****************Extracts title, prices,image From Flipkart Website *********************************************
-from bs4 import BeautifulSoup
+
+import pandas as pd
 import requests
-
-url = "https://www.flipkart.com/canon-eos-3000d-dslr-camera-1-body-18-55-mm-lens/p/itm6f665fea97bc2?pid=CAMF3DHJURPEMNRN&lid=LSTCAMF3DHJURPEMNRNBKP0RG&marketplace=FLIPKART&store=jek%2Fp31&srno=b_1_3&otracker=browse&fm=organic&iid=46c135fc-f5e8-41c4-9a0d-0f5e8914fa81.CAMF3DHJURPEMNRN.SEARCH&ppt=clp&ppn=camera-clp-store&ssid=npop6te04g0000001713950091565"
-
-response = requests.get(url)
-print(response.status_code)
-print(response.content)
-
-htmlcontent = response.content
-
-soup = BeautifulSoup(htmlcontent, 'html.parser')
-print(soup.prettify())
-
-print(soup.title)
-print(soup.title.name)
-print(soup.title.string)
-print(soup.title.parent.name)
-print(soup.p)
-print(soup.a)
-print(soup.find('a'))
-print(soup.find(id="next-page-link-tag"))
-
-for link in soup.find_all('a'):
-    print(link.get('href'))
-
-for image in soup.find_all('img'):
-    print(image.get('src'))
-
-product = soup.find_all('div', class_= 'XiSiPK AqhsUa')
-print(product)
-
-product = soup.find('div', attrs= {'class':'XiSiPK AqhsUa'})
-print(product)
+from bs4 import BeautifulSoup
 
 
+Product_name = []
+Prices = []
+Description = []
+Reviews = []
+
+for i in range(2, 12):
+    url = "https://www.flipkart.com/search?q=mobiles+under+50000&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off&page=" + str(i)
+    r = requests.get(url)
+    soup = BeautifulSoup(r.text, "lxml")
+
+    box = soup.find_all("div",class_ = "DOjaWF gdgoEp")
+    names = soup.find_all("div",class_ = "KzDlHZ")
+    # print(names)
+    for i in names:
+        name = i.text
+        Product_name.append(name)
+    print(Product_name)
 
 
+    prices = soup.find_all("div", class_="Nx9bqj _4b5DiR")
 
-# from bs4 import BeautifulSoup
-# import requests
+    for i in prices:
+        name = i.text
+        Prices.append(prices)
+    # print(Prices)
 
-# url = "https://www.flipkart.com/canon-eos-3000d-dslr-camera-1-body-18-55-mm-lens/p/itm6f665fea97bc2?pid=CAMF3DHJURPEMNRN&lid=LSTCAMF3DHJURPEMNRNBKP0RG&marketplace=FLIPKART&store=jek%2Fp31&srno=b_1_3&otracker=browse&fm=organic&iid=46c135fc-f5e8-41c4-9a0d-0f5e8914fa81.CAMF3DHJURPEMNRN.SEARCH&ppt=clp&ppn=camera-clp-store&ssid=npop6te04g0000001713950091565"
+    desc = soup.find_all("div",class_ = "_6NESgJ")
 
-# response = requests.get(url)
+    for i in desc:
+        name = i.text
+        Description.append(desc)
 
-# htmlcontent = response.content
+    # print(Description)
 
-# soup = BeautifulSoup(htmlcontent, 'html.parser')
 
-# titles = []
-# prices = []
-# images = []
+    reviews = soup.find_all("div", class_ = "Rza2QY")
+    for i in reviews:
+        name = i.text
+        Reviews.append(name)
+    # print(Reviews)
 
-# for d in soup.find_all('div', attrs={'class':'_6EBuvT'}):
-#     print(d)
+df = pd.DataFrame({"Product Name":Product_name,"Prices":Prices,"Description":Description,"Reviews":Reviews})
+print(df)
